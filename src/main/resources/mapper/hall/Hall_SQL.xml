@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="hall">
+    
+    <!-- 상영관 저장 -->
+	<insert id="insertHall" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO TB_HALL
+			(
+				HALL_NO,
+			    HALL_NAME, 
+			    SEAT_CNT, 
+			    THEATER_NO
+			)
+			VALUES
+			(
+				SEQ_TB_HALL_HALL_NO.NEXTVAL, 
+			    #{HALL_NAME}, 
+			    #{SEAT_CNT},
+			    #{THEATER_NO}
+			)
+		]]>
+	</insert>
+	
+	<!-- 영화관 상세조회 -->
+	<select id="selectHallList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				H.HALL_NO,
+				H.HALL_NAME,
+				H.SEAT_CNT,
+				T.THEATER_NO,
+				T.THEATER_NAME
+			FROM
+				TB_HALL H JOIN TB_THEATER T
+				ON H.THEATER_NO = T.THEATER_NO
+			WHERE
+				T.THEATER_NO = #{THEATER_NO}
+		]]>
+	</select>
+	
+</mapper>

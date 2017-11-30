@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="time">
+	
+	<!-- 상영시간 등록 -->
+	<insert id="insertTime" parameterType="hashmap">
+		<selectKey keyProperty="TIME_NO" resultType="string" order="BEFORE">
+			SELECT SEQ_TB_TIME_TIME_NO.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO TB_TIME
+		(
+			TIME_NO,
+		    SHOW_DT, 
+		    START_TIME,
+		    END_TIME,
+		    MOVIE_NO, 
+		    THEATER_NO, 
+		    HALL_NO
+		)
+		VALUES
+		(
+			#{TIME_NO}, 
+		    #{SHOW_DT}, 
+		    #{START_TIME},
+		    <!-- 종료시간 = 시작시간 + 영화상영시간  -->
+		    TO_CHAR(
+		    		TO_DATE(#{SHOW_DT} || #{START_TIME},'YYYY/MM/DD HH24:MI') + 
+		    	   	(SELECT RUN_TIME FROM TB_MOVIE WHERE MOVIE_NO = #{MOVIE_NO})/1440
+		    ,'HH24:MI'),
+		    #{MOVIE_NO}, 
+		    #{THEATER_NO}, 
+		    #{HALL_NO}
+		)
+	</insert>
+	
+	<!-- 상영시간 조회 -->
+	<select id="selectTimeList" parameterType="hashmap" resultType="hashmap">
+		SELECT
+			b.*,
+			c.USEABLE_CNT,
+			ROW_NUMBER() OVER(PARTITION BY MOVIE_NO ORDER BY THEATER_NO, MOVIE_NO, SHOW_DT DESC, START_TIME) AS rn
+		FROM
+		(
+			SELECT
+	      		a.*
+		    FROM
+		    (
+		      SELECT
+					TM.TIME_NO,
+					TO_CHAR(TM.SHOW_DT, 'yyyy.mm.dd') as SHOW_DT,
+					TM.START_TIME,
+					TM.END_TIME,
+					TT.THEATER_NO,
+					TT.THEATER_NAME,
+					MV.MOVIE_NO,
+					MV.MOVIE_NAME,
+					MV.GENRE,
+					TO_CHAR(MV.PLAY_DT, 'yyyy.mm.dd') as PLAY_DT,
+					MV.GRADE,
+					MV.RUN_TIME,	
+					HL.HALL_NO,
+					HL.HALL_NAME,
+					HL.SEAT_CNT
+				FROM
+					TB_TIME TM JOIN TB_MOVIE MV
+						ON TM.MOVIE_NO = MV.MOVIE_NO
+					JOIN TB_THEATER TT
+						ON TM.THEATER_NO = TT.THEATER_NO
+					JOIN TB_HALL HL
+						ON TM.HALL_NO = HL.HALL_NO
+				WHERE
+					1 = 1
+				<if test='SHOW_DT != null and SHOW_DT != ""'>
+					AND TM.SHOW_DT = #{SHOW_DT}
+				</if>
+				<if test='THEATER_NO != null and THEATER_NO != ""'>
+					AND TT.THEATER_NO = #{THEATER_NO}
+				</if>
+				<if test='MOVIE_NO != null and MOVIE_NO != ""'>
+					AND MV.MOVIE_NO = #{MOVIE_NO}
+				</if>
+		    ) a
+		) b
+		JOIN
+		(
+		 	SELECT 
+			 	T.TIME_NO, 
+				COUNT(*) as USEABLE_CNT 
+			FROM 
+				TB_TIME T JOIN TB_SEAT S 
+				ON T.TIME_NO = S.TIME_NO AND S.USEABLE = 'Y'
+			GROUP BY T.TIME_NO
+		) c
+		ON b.TIME_NO = c.TIME_NO
+	</select>
+	
+	<!-- 상영관 좌석등록 -->
+	<insert id="insertSeat" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO TB_SEAT
+			(
+				SEAT_NO, 
+				TIME_NO
+			) 
+			VALUES
+			(
+				#{SEAT_NO},
+				#{TIME_NO}
+			)
+		]]>
+	</insert>
+	
+</mapper>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="point">
+	
+	<!-- 포인트 내역 추가 (회원가입) -->
+	<insert id="insertPointByJoin" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO TB_POINT
+			(
+				POINT_NO,
+			    DETAILS,
+			    POINT, 
+			    TOT_POINT, 
+			    POINT_DT,
+			    POINT_ID
+			)
+			VALUES
+			(
+				SEQ_TB_POINT_POINT_NO.NEXTVAL,
+			    '회원가입', 
+			    1000,
+				1000,
+			    SYSDATE,
+			    #{ID}
+			)
+		]]>
+	</insert>
+	
+	<!-- 이벤트 참여 중복체크 -->
+	<select id="selectMyEventPointCnt" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT 
+				COUNT(*) 
+			FROM 
+				TB_POINT 
+			WHERE 
+				EVENT_NO = #{EVENT_NO} 
+				AND POINT_ID = #{POINT_ID}
+		]]>
+	</select>
+	
+	<!-- 포인트 내역 추가 (이벤트) -->
+	<insert id="insertPointByEvent" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO TB_POINT
+			(
+				POINT_NO,
+			    DETAILS,
+			    POINT, 
+			    TOT_POINT, 
+			    POINT_DT,
+			    POINT_ID,
+			    EVENT_NO
+			)
+			VALUES
+			(
+				SEQ_TB_POINT_POINT_NO.NEXTVAL,
+			    '이벤트 참여', 
+			    #{POINT},
+				(
+					SELECT
+						TOT_POINT + #{POINT}
+					FROM
+					(
+						SELECT
+							TOT_POINT,
+							ROW_NUMBER() OVER(ORDER BY POINT_NO DESC) as RNUM
+						FROM
+							TB_POINT
+						WHERE
+							POINT_ID = #{POINT_ID}
+					) X
+					WHERE X.RNUM = 1
+				),
+			    SYSDATE,
+			    #{POINT_ID},
+			    #{EVENT_NO}
+			)
+		]]>
+	</insert>
+	
+	<!-- 포인트 내역 추가 (영화예매) -->
+	<insert id="insertPointByBook" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO TB_POINT
+			(
+				POINT_NO,
+			    DETAILS,
+			    POINT, 
+			    TOT_POINT, 
+			    POINT_DT,
+			    POINT_ID
+			)
+			VALUES
+			(
+				SEQ_TB_POINT_POINT_NO.NEXTVAL,
+			    (SELECT MOVIE_NAME FROM TB_MOVIE WHERE MOVIE_NO = #{MOVIE_NO}) || ' - 예매',
+			    -#{DISCNT_CHARGE},
+				(
+					SELECT
+						TOT_POINT - #{DISCNT_CHARGE}
+					FROM
+					(
+						SELECT
+							TOT_POINT,
+							ROW_NUMBER() OVER(ORDER BY POINT_NO DESC) as RNUM
+						FROM
+							TB_POINT
+						WHERE
+							POINT_ID = #{ID}
+					) X
+					WHERE X.RNUM = 1
+				),
+			    SYSDATE,
+			    #{ID}
+			)
+		]]>
+	</insert>
+	
+	<!-- 포인트 내역 추가 (영화예매 취소) -->
+	<insert id="insertPointByBookCancle" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO TB_POINT
+			(
+				POINT_NO,
+			    DETAILS,
+			    POINT, 
+			    TOT_POINT, 
+			    POINT_DT,
+			    POINT_ID
+			)
+			VALUES
+			(
+				SEQ_TB_POINT_POINT_NO.NEXTVAL,
+			    (SELECT MOVIE_NAME FROM TB_MOVIE WHERE MOVIE_NO = #{MOVIE_NO}) || ' - 예매취소',
+			    #{USE_POINT},
+				(
+					SELECT
+						TOT_POINT + #{USE_POINT}
+					FROM
+					(
+						SELECT
+							TOT_POINT,
+							ROW_NUMBER() OVER(ORDER BY POINT_NO DESC) as RNUM
+						FROM
+							TB_POINT
+						WHERE
+							POINT_ID = #{BOOK_ID}
+					) X
+					WHERE X.RNUM = 1
+				),
+			    SYSDATE,
+			    #{BOOK_ID}
+			)
+		]]>
+	</insert>
+	
+	<!-- 나의 가용 포인트 조회 -->
+	<select id="selectMyPoint" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT
+				TOT_POINT
+			FROM
+			(
+				SELECT
+					TOT_POINT,
+					ROW_NUMBER() OVER(ORDER BY POINT_NO DESC) as RNUM
+				FROM
+					TB_POINT
+				WHERE
+					POINT_ID = #{ID}
+			) X
+			WHERE X.RNUM = 1
+		]]>
+	</select>
+	
+</mapper>

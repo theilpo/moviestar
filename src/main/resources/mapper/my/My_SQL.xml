@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="my">
+   
+   	<!-- 나의문의 목록 카운트-->
+	<select id="selectMyRequestListCnt" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT
+				COUNT(*)
+			FROM
+				TB_REQUEST
+			WHERE
+				PARENT_IDX IS NULL
+				AND REQ_ID = #{REQ_ID}
+		]]>
+	</select>
+	
+	<!-- 나의문의 목록조회 -->
+	<select id="selectMyRequestList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				*
+			FROM
+			(
+				SELECT
+					IDX,
+					PARENT_IDX,
+					TITLE,
+					CONTENTS,
+					REQ_ID,
+					TO_CHAR(REQ_DTM,'YYYY-MM-DD') as REQ_DTM,
+					ANSWER_ID,
+					TO_CHAR(ANSWER_DTM,'YYYY-MM-DD') as ANSWER_DTM,
+					ANSWER_GB,
+					ROW_NUMBER() OVER(ORDER BY IDX DESC) as RNUM
+				FROM
+					TB_REQUEST
+				WHERE
+					PARENT_IDX IS NULL
+					AND REQ_ID = #{REQ_ID}
+			) X
+			WHERE
+				X.RNUM BETWEEN #{first} AND #{last}	
+		]]>
+	</select>
+	
+	<!-- 나의문의 수정 -->
+	<update id="updateMyRequest" parameterType="hashmap">
+		<![CDATA[
+		
+			UPDATE TB_REQUEST
+			SET
+				TITLE = #{TITLE},
+				CONTENTS = #{CONTENTS}
+			WHERE
+				IDX = #{IDX}
+		]]>
+	</update>
+	
+	<!-- 나의문의 삭제 -->
+	<delete id="deleteMyRequest" parameterType="hashmap">
+		<![CDATA[
+		
+			DELETE 
+				FROM TB_REQUEST
+			WHERE
+				IDX = #{IDX}
+		]]>
+	</delete>
+	
+	<!-- 나의한줄평 목록 카운트-->
+	<select id="selectMyCommentListCnt" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT
+				COUNT(*)
+			FROM
+				TB_COMMENT C JOIN TB_MOVIE M
+				ON C.MOVIE_NO = M.MOVIE_NO
+			WHERE
+				C.CREA_ID = #{CREA_ID}
+		]]>
+	</select>
+	
+	<!-- 나의 한줄평 목록 조회 -->
+	<select id="selectMyCommentList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				*
+			FROM
+			(
+				SELECT
+					C.COMMENT_NO,
+					C.MOVIE_NO,
+					M.MOVIE_NAME,
+					C.STAR_POINT,
+					C.CONTENTS,
+					TO_CHAR(C.CREA_DTM, 'YYYY-MM-DD') as CREA_DT,
+					ROW_NUMBER() OVER(ORDER BY C.COMMENT_NO DESC) as RNUM
+				FROM
+					TB_COMMENT C JOIN TB_MOVIE M
+					ON C.MOVIE_NO = M.MOVIE_NO
+				WHERE
+					C.CREA_ID = #{CREA_ID}
+			) X
+			WHERE
+				X.RNUM BETWEEN #{first} AND #{last}
+		]]>
+	</select>
+	
+	<!-- 나의 포인트 목록 카운트-->
+	<select id="selectMyPointListCnt" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT
+				COUNT(*)
+			FROM
+				TB_POINT
+			WHERE
+				POINT_ID = #{POINT_ID}
+		]]>
+	</select>
+	
+	<!-- 나의 포인트 목록 조회 -->
+	<select id="selectMyPointList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				*
+			FROM
+			(
+				SELECT
+					POINT_NO,
+					DETAILS,
+					POINT,
+					TOT_POINT,
+					TO_CHAR(POINT_DT, 'YYYY-MM-DD') as POINT_DT,
+					POINT_ID,
+					ROW_NUMBER() OVER(ORDER BY POINT_NO DESC) as RNUM
+				FROM
+					TB_POINT
+				WHERE
+					POINT_ID = #{POINT_ID}
+			) X
+			WHERE
+				X.RNUM BETWEEN #{first} AND #{last}
+		]]>
+	</select>
+	
+	<!-- 나의 예매 목록 카운트-->
+	<select id="selectMyBookListCnt" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT
+				COUNT(*)
+			FROM
+				TB_BOOK
+			WHERE
+				BOOK_ID = #{BOOK_ID}
+		]]>
+	</select>
+	
+	<!-- 나의 예매 목록 조회 -->
+	<select id="selectMyBookList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+			 	BK.*,
+			 	MV.MOVIE_NO,
+			 	MV.MOVIE_NAME,
+			 	TH.THEATER_NAME,
+			 	HL.HALL_NAME,
+			 	TO_CHAR(TM.SHOW_DT, 'yyyy.mm.dd') || '(' || TO_CHAR(TM.SHOW_DT, 'DY', 'NLS_DATE_LANGUAGE=korean') || ')' as SHOW_DT,
+			 	TM.START_TIME
+			FROM
+			(
+				SELECT
+					BOOK_NO,
+					TIME_NO,
+					SEATS_NO,
+					USE_POINT,
+					TO_CHAR(BOOK_DT, 'YYYY-MM-DD') as BOOK_DT,
+					BOOK_ID,
+					STATUS,
+					ROW_NUMBER() OVER(ORDER BY BOOK_DT DESC) as RNUM
+				FROM
+					TB_BOOK
+				WHERE
+					BOOK_ID = #{BOOK_ID}
+			) BK JOIN TB_TIME TM
+				  ON BK.TIME_NO = TM.TIME_NO
+			  JOIN TB_MOVIE MV 
+			  	  ON TM.MOVIE_NO = MV.MOVIE_NO
+			  JOIN TB_THEATER TH 
+			  	  ON TM.THEATER_NO = TH.THEATER_NO
+			  JOIN TB_HALL HL 
+			  	  ON TM.HALL_NO = HL.HALL_NO
+			WHERE 
+				BK.RNUM BETWEEN #{first} AND #{last}
+		]]>
+	</select>
+	
+</mapper>

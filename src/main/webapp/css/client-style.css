@@ -1,0 +1,301 @@
+@charset "utf-8";
+
+/**************************************************        reset start       ************************************************/ 
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, pre, a, abbr, acronym, cite, code, del, dfn, em, img, ins, q, s, samp, strike,  sub, sup, u, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, embed {margin:0;padding:0;border:0;}
+html{overflow-y:scroll}
+html,body{width:100%;height:100%;*word-break:break-all;-ms-word-break:break-all;}
+body,h1,h2,h3,h4,h5,h6,input,button,textarea,select{color:#666;line-height:1.5;font:12px "돋움",Dotum,Verdana,Arial,AppleGothic,sans-serif;}
+img,fieldset,iframe{border:0 none}
+legend{position:absolute;left:-1000%;top:0;width:1px;height:1px;font-size:0;line-height:0;overflow:hidden}
+caption {width:0;height:0;visibility:hidden;line-height:0;font-size:0}
+ol, ul,li{ list-style:none;}
+input,select,button,img,textarea {vertical-align:middle}
+i,em,address{font-style:normal}
+label,button{cursor:pointer}
+button {margin:0;padding:0;border:0;background-color:transparent;cursor:pointer;}
+button *{position:relative}
+button img{left:-3px;*left:auto}
+table {border-spacing:0;width:100%;border: 0 none;border-collapse: collapse;table-layout:fixed;word-wrap:break-word;}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {display: block;margin: 0;padding: 0;border: 0;}
+form{text-align:left;}
+caption, th, td {text-align:left; font-weight:normal;}
+legend{*width:0}
+a { color:#666; cursor:pointer;}
+a:link,a:visited { text-decoration:none;}
+a:hover,a:active { text-decoration:none; cursor:pointer;}
+/**************************************************        reset end       ************************************************/ 
+
+
+/**************************************************      common start     *************************************************/
+.content_wrap{width: 970px; margin: 40px auto;}
+.essential{color: red;}
+.title{font-size: 30px; font-weight: bold; padding:5px 0px;}
+.sub_title{font-size: 25px; font-weight: bold; padding: 10px 15px; border-bottom: 1px solid #d0d0d0;}
+.explain{font-size: 15px; padding:3px 0px;}
+.etc{float: right; padding:3px 0px;}
+.pointer{background-image: url("../images/pencil.png"); background-repeat: no-repeat;
+		 margin: 30px auto 15px auto; width: 945px; padding-left: 25px; font-size: 15px; font-weight: bold;}
+.caution{background-image: url("../images/exclamation-mark.png"); background-repeat: no-repeat; 
+		 padding-left: 20px; margin-top: 4px;}
+.btn_wrap{margin-top: 40px; text-align:center;}
+.btn_orange{padding: 10px 15px; background-image: url("../images/btn_color_orange.png"); font-weight: bold; border: none;}
+.btn_gray{padding: 10px 15px; background-image: url("../images/btn_color_gray.png"); font-weight: bold; border: none;}
+.btn_orange:hover, .btn_gray:hover{cursor: pointer;}
+.top{position: fixed; bottom: 30px; right: 30px;}
+.admin{position: fixed; bottom: 80px; right: 30px;}
+.tcenter{text-align: center;}
+.common_table{margin-top: 30px;}
+.common_table tr{border:1px solid #d0d0d0;}
+.common_table th{padding: 15px 0px 15px 10px; background-color:#ebf0f2; font-weight: bold;}
+.common_table td{padding: 15px 0px 15px 10px; }
+#pageNav{margin-top: 20px; font-size: 14px; text-align: center;}
+.red_bold{color: red; font-weight: bold;}
+/**************************************************      common end     *************************************************/
+
+
+/**************************************************     header start    *************************************************/
+.top_menu_wrap{height: 30px; background-color: #b9bfce;}
+.top_menu{width: 970px; margin: 0 auto; text-align: right; padding: 7px 0px; font-size: 13px;}
+.top_menu a{color: #565e6b;}
+.top_menu a:hover{text-decoration: underline;}
+header {position: relative; margin: 0 auto; height: 140px;}
+.menu_logo{text-align: center; padding: 15px 0px;}
+.menu_wrap {height: 50px; border-top: 1px solid #dde7e9; border-bottom: 2px solid #dde7e9;}
+.menu_list {margin: 0 auto; display: table; font-size: 13px; font-weight: bold;}
+.menu_list li {float: left; padding: 17px 22px;}
+.menu_list li a {color:#333333;}
+.menu_list li a:hover {color:#6ea8b0;}
+/**************************************************     header end    *************************************************/
+
+
+/************************************************       contents start     *********************************************/
+/* main - flexslider */
+.flex-caption {width: 96%;padding: 2%;background: #2d2d2d;color: #dde7e9;font-size: 12px;font-weight: bold;line-height: 18px;}
+
+/* main - movieInfo tab */
+.movie_info_wrap {width: 970px; margin: 50px auto;}
+.main_tab {margin: 0; padding: 0; overflow: hidden; display: table; margin-left: auto; margin-right: auto; }
+.main_tab li {float: left;}
+.main_tabcontent {display: none; margin-top: 30px; overflow: hidden;}
+.main_tabcontent.current {display: block;}
+
+/* main - community */
+.community_info_wrap{width: 970px; height: 150px; margin: 0px auto;}
+.community_notice_wrap{width: 410px; height: 150px; float: left;}
+.community_event_wrap{width: 410px; height: 150px; float: right;}
+.community_title{font-size: 20px; font-weight: bold;}
+.community_more{font-size: 17px; font-weight: bold; float: right;}
+.community_notice_table, .community_event_table{clear: right; margin-top: 10px;}
+.community_notice_table tr, .community_event_table tr{line-height: 1.8; border-bottom: 1px solid #d0d0d0;}
+
+/* main - login */
+.login_close{padding: 3px 3px; float: right;}
+.login_logo{margin-top: 60px; text-align: center; clear: right;}
+.login_input{margin-top: 10px; text-align: center;}
+.login_input input{margin-top: 5px; padding: 6px 0px;}
+.mask {position:absolute; left:0; top:0; z-index:9999; background-color:#000; display:none;}
+.window {width: 320px; height: 320px; background-color: #ffffff; z-index:99999; display: none;}
+
+/* memberWrite, memberUpdate */
+.member_table th, .password_table th{background-color:#ebf0f2; border: 1px solid #d0d0d0; font-weight: bold; text-align: center; }
+.member_table td, .password_table td{border: 1px solid #d0d0d0; padding:7px 0px; padding-left: 6px;}
+.genre_table td{width:25%; padding:7px 0px;}
+
+/* memberWriteOK, memberUpdateOK */
+.write_ok_msg{margin-top: 50px; text-align: center; font-size: 20px; font-weight: bold;}
+.write_ok_msg div{padding: 10px 0px;}
+
+/* mypage */
+.my_tab {margin: 0;padding: 0; overflow: hidden; display: table; margin: 30px auto 0px auto; }
+.my_tab li {float: left; padding: 15px 20px; border-bottom:1px solid #dde7e9; font-weight: bold;}
+.my_tab li.current {background-color: #dde7e9;}
+.my_tabcontent {display: none; padding: 6px 12px; height: 350px; margin-top: 30px; border: 1px solid gray;}
+.my_tabcontent.current {display: block;}
+#my_tab5{text-align: center;}
+#my_tab5 .logo{margin-top: 50px;}
+#my_tab5 .text{margin-top: 10px; font-size: 14px;}
+#my_tab5 #PASSWORD{margin-top: 20px; padding: 10px 10px;}
+
+/* requestWrite */
+.request_table{margin: 30px 0px 10px 0px;}
+.request_table tr{border:1px solid #d0d0d0;}
+.request_table th, .request_table td{padding: 8px 0px 8px 10px; }
+.request_table th{background-color:#ebf0f2; font-weight: bold; }
+.request_table input{padding: 6px 6px;}
+
+/* eventList */
+.event_container{margin-top: 25px; overflow: hidden;}
+.eventDiv{width: 230px; height: 400px; float: left; margin: 5px 5px; border:1px solid #d0d0d0;}
+.eventTitle{padding : 10px 10px; font-size: 16px; font-weight: bold; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;}
+.eventPeriod{padding : 5px 10px; font-size: 13px;}
+.eventDiv:HOVER{cursor: pointer;}
+
+/* eventDetail */
+.event_detail_title{margin-top: 30px; padding: 6px 0px; font-size: 25px; font-weight: bold;}
+.event_detail_Period{font-size: 13px; padding: 0px 4px;}
+.event_detail_img{width: 700px; margin: 30px auto;}
+
+/* theaterList */
+.theater_bg{margin: 25px 0px 40px 0px;}
+.theater_tab {margin: 0;padding: 0; overflow: hidden; display: table; margin: 30px auto 0px auto; }
+.theater_tab li {float: left; padding: 15px 20px; border-bottom:1px solid #dde7e9; font-weight: bold;}
+.theater_tab li.current, .theater_tab li:HOVER{background-color: #dde7e9;}
+.theater_tabcontent {display: none; margin-top: 20px; overflow: hidden;}
+.theater_tabcontent.current {display: block; }
+.theaterDiv{width: 230px; height: 170px; float: left; margin: 5px 5px; border:1px solid #d0d0d0;}
+.theaterName{padding : 10px 10px; font-size: 16px; font-weight: bold; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;}
+.theaterDiv:HOVER{cursor: pointer;}
+
+/* theaterDetail */
+.theater_wrap #map{height:500px; border:1px solid #d0d0d0;}
+.theaterSubDiv{margin: 20px 0px;}
+.theaterSubName{padding: 6px 0px; font-size: 25px; font-weight: bold;}
+.theaterSubAddr{font-size: 13px; padding: 0px 4px;}
+
+/* movieList */
+.movie_wrap{margin-top: 30px; position: relative;}
+.movie_tab {margin: 0; padding: 0; overflow: hidden; display: table; margin-left: auto; margin-right: auto; }
+.movie_tab li {float: left;}
+.movie_tabcontent {display: none; margin-top: 30px; overflow: hidden; }
+.movie_tabcontent.current {display: block;}
+.movieDiv{position: relative; width: 185px; height: 340px; float: left; margin: 3px 3px; border:1px solid #d0d0d0;}
+.movieTitle{padding : 10px 10px; font-size: 16px; font-weight: bold; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;}
+.movieAvgPoint{padding : 10px 10px; font-size: 13px; border-top: 1px solid #d0d0d0;}
+.movieRankDday{position: absolute; top: 0px; left: 0px; padding: 5px 10px; background-color: #2b7883; font-size: 20px; font-weight: bold; color: white; opacity : 0.9; filter: alpha(opacity=90); -moz-opacity:0.9; -khtml-opacity: 0.9; }
+.movieDiv:HOVER{cursor: pointer;}
+
+/* movieDetail */
+.movieDetailMainImg{display: inline-block; width: 185px; height: 260px; }
+.movieDetailDiv{display: inline-block; position: absolute; left: 185px; right: 0; height: 260px; padding-left: 30px;}
+.movieDetailTitle{font-size: 20px; font-weight: bold; padding: 10px 0px;}
+.movieDetailEtc{font-size: 14px; padding: 10px 0px;}
+.movieDetailEtc span{line-height: 1.6;}
+.movieDetailSubImg #carousel{width: 830px; display: table; margin: 0px auto 10px auto;}
+.movieDetailSubImg #carousel img{cursor: pointer;}
+.movieDetailSubImg #slider{border:1px solid #d0d0d0;}
+.commentFormTable tr, .commentFormTable td{border:1px solid #d0d0d0;}
+.starDiv div{margin: 10px 0px; text-align: center;}
+.starDiv img{margin-left: -4px; padding: 0px 2px;}
+.commentFormTable #CONTENTS{overflow: hidden; resize: none; border-style: hidden; line-height: 1.6;}
+.btn_comment{width:100%; height: 70px; border: none; background-color: #ebf0f2; font-weight: bold; font-size: 17px;}
+.btn_comment:HOVER{cursor: pointer;}
+.commentListTable{margin-top: 40px; border-top: 1px solid #d0d0d0; font-size: 16px;}
+.commentListTable tr{border-bottom: 1px solid #d0d0d0;}
+.commentListTable div{padding: 10px 0px;}
+.comment_textCnt{float: right; font-size: 15px; padding-bottom : 4px;}
+
+/* bookLvl-1 */
+.book_time_wrap{height: 30px; background-color: #d6d9e2; margin: 30px 0px;}
+.book_time_tab {display: table; margin: 0px auto;}
+.book_time_tab li {float: left; padding: 7px 10px; font-size: 13px;}
+.book_time_tab li.current{font-weight: bold; text-decoration: underline;}
+.book_time_tabcontent {display: none; margin-top: 20px; overflow: hidden;}
+.book_time_tabcontent.current {display: block; }
+.bookDiv1{position: relative; height: 500px; margin-top: 20px; border-top: 2px solid black;}
+.bookDiv1_theater{display: inline-block; width: 60%; height: 100%;}
+.bookDiv1_movie{display: inline-block; position: absolute; left: 60%; right: 0; height: 100%; border-left: 1px solid #d0d0d0;}
+.bookDiv1_info{padding: 25px 10px; background-color: #d6d9e2; font-size: 14px;}
+.bookDiv1_info_table td{font-weight: bold;}
+.book_theater_tab{margin: 10px 0px; width: 100px; background-color: #565e6b;}
+.book_theater_tab li{float: left; width: 100px; padding: 15px 10px; margin: 3px 3px; font-weight: bold;}
+.book_theater_tab li.current, .book_theater_tab li:HOVER{background-color: #dde7e9;}
+.book_theater_tabcontent {display: none; overflow: hidden;}
+.book_theater_tabcontent.current {display: block; }
+.bookTheaterDiv, .timeTheaterDiv{width: 120px; padding: 15px 10px; float: left; margin: 3px 3px; background-color: #efefef; text-align: center;}
+.bookTheaterDiv.current, .timeTheaterDiv.current{padding: 14px 9px; font-weight: bold; border:1px solid #333333; background-color: #ffffff;}
+.bookTheaterDiv:HOVER, .timeTheaterDiv:HOVER{cursor: pointer;}
+.book_movie{height: 440px; margin: 5px 0px; overflow-y: scroll;}
+.bookMovieDiv{padding: 10px 10px; margin: 3px 0px; cursor: pointer;}
+.bookMovieDiv.current{padding: 9px 9px; font-weight: bold; border:1px solid #333333;}
+.bookDiv2{margin-top: 30px;}
+.book_time{margin-top: 10px;}
+.bookTimeDiv{padding: 20px 10px; overflow: hidden;}
+.bookTimeDivTitle{margin-bottom: 15px;}
+.bookTimeDivTitle span{font-size: 16px; font-weight: bold; vertical-align: middle;}
+.bookTimeDivTimeInfo{width: 130px; float: left; margin: 3px 3px 0px 0px; border:1px solid #d0d0d0;}
+.bookTimeDivTimeInfo.current{background-color: black; color: white;}
+.bookTimeDivTimeInfo:HOVER{cursor: pointer;}
+.bookTimeDivHall, .bookTimeDivSeat{padding: 5px 0px; text-align: center;}
+.bookTimeDivTime{padding: 10px 0px; text-align: center; font-size: 15px; font-weight: bold; border-top: 1px solid #d0d0d0; border-bottom: 1px solid #d0d0d0;}
+.timeDiv1{margin-top: 20px; border-top: 2px solid black;}
+.time_theater_tab{margin-top: 10px; overflow: hidden;}
+.time_theater_tab li{float: left; width: 110px; padding: 15px 0px; margin: 3px 3px; font-weight: bold; text-align: center;}
+.time_theater_tab li:HOVER{cursor: pointer;}
+.time_theater_tab li.current{background-color: #dde7e9;}
+.time_theater_tabcontent{display: none; overflow: hidden;}
+.time_theater_tabcontent.current{display: block; }
+.timeDiv2{margin-top: 100px; border-top: 2px solid black;}
+.bookTimeNoSelectDiv, .bookTimeNoDataDiv{padding: 120px 0px; font-size: 16px; text-align: center;}
+
+/* bookLvl-2 */
+.book_number_seat_wrap{margin: 50px 0px; border: 2px solid #575757; overflow: hidden;}
+.book_number_seat_text{background-color: #575757; color: #d6d6d6; font-size: 15px; font-weight: bold; padding: 10px 0px; text-align: center;}
+.book_number_wrap, .book_info_wrap{width: 50%; height: 130px; float: left; border-bottom: 1px solid #575757;}
+.book_number_adult, .book_number_teen, .book_number_special{clear: both; overflow: hidden; margin: 5px 0px; text-align: center;}
+.book_number_label{float: left; width: 80px; padding: 10px 0px;}
+.book_number_div{float: left; width: 30px; padding: 10px 0px; margin-right: 5px; border: 1px solid #d0d0d0; font-weight: bold;}
+.book_number_div.current{color: white; background-color: #333333;}
+.book_number_div:HOVER{cursor: pointer;}
+.book_info_1{padding: 35px 0px 5px 20px; font-size: 14px;}
+.book_info_2{padding: 15px 0px 15px 20px; font-size: 19px; font-weight: bold;}
+.book_seat_wrap{clear: both; overflow: hidden; padding: 30px 20px 30px 70px; }
+.book_seat_wrap.disabled{opacity : 0.6; filter: alpha(opacity=60); -moz-opacity:0.6; -khtml-opacity: 0.6; }
+.book_seat_left_wrap{width: 80%; float: left;}
+.book_seat_right_wrap{width: 19%; float: right; margin-top: 60px;}
+.book_seat_screen{background-color: #efefef; text-align: center; font-weight: bold; padding: 10px 0px;}
+.book_seat_div{display: table; margin: 30px auto;}
+.seat_col{float: left; width: 25px; padding: 5px 0px; margin: 1px 1px; text-align: center; border: 1px solid gray;}
+.seat_row:AFTER{clear: both; display: block; content: '';}
+.seat_right_row{margin: 5px 0px; overflow: hidden;}
+.seat_row_name{float: left; width: 21px; padding: 5px 2px; margin: 1px 1px; font-weight: bold; text-align: center;}
+.seat_common{float: left; color: white; width: 21px; padding: 3px 0px; margin: 1px 1px; cursor: pointer; text-align: center; }
+.seat_basic{background-color: #666666; }
+.seat_choice{border: 2px solid #ad1712; background-color: #ad1712; }
+.seat_finish{border: 2px solid #bbbbbb; background-color: #bbbbbb; }
+.seat_prime{border: 2px solid #f71708; }
+.seat_standard{border: 2px solid #01c73c; }
+.seat_economy{border: 2px solid #ed8c00; }
+.seat_label{float: left; padding: 5px 5px;}
+.book_all_info_wrap{clear: both; height: 120px; background-color: #343433; color: #d6d6d6; font-weight: bold;}
+.book_all_info{float: left; padding: 8px 8px; }
+.book_prev, .book_next{width: 11%; }
+.book_movie_info, .book_time_info, .book_seat_info, .book_charge_info{width: 17%; }
+.book_all_info table th{width: 25%; font-size: 11px; line-height: 2.2;}
+.book_all_info table td{width: 75%; font-size: 11px; font-weight: bold;}
+
+/* bookLvl-3 */
+.book_pay_wrap{margin: 50px 0px; border: 2px solid #575757; overflow: hidden;}
+.book_pay_text{background-color: #575757; color: #d6d6d6; font-size: 15px; font-weight: bold; padding: 10px 0px; text-align: center;}
+.pay_point_table{width: 95%; margin: 20px 20px;}
+.pay_point_table tr{border:1px solid #d0d0d0;}
+.pay_point_table th, .pay_point_table td{padding: 8px 0px 8px 10px; }
+.pay_point_table th{background-color:#ebf0f2; font-weight: bold; }
+.pay_point_table input{padding: 6px 6px;}
+.chargeCommon{float: left; width: 30%; margin: 0px 0px 30px 20px; border: 2px solid #202020;}
+.payChargeText, .discntChargeText, .finalChargeText{padding: 10px 0px; font-weight: bold; text-align: center;}
+.discntChargeText{background-color: #d9e7eb}
+.finalChargeText{background-color:#f0ebd2}
+.payCharge, .discntCharge, .finalCharge{padding: 20px 0px; font-size: 20px; font-weight: bold; text-align: center;}
+.payCharge{background-color: #474747; color: #ffffff}
+.discntCharge{background-color: #3c464f; color: #89e5f4}
+.finalCharge{background-color: #443128; color: #ffe56b}
+
+/* bookLvl-4 */
+.bookOK_info_wrap{margin: 50px 0px; border: 2px solid #575757; overflow: hidden;}
+.bookOK_info_text{background-color: #575757; color: #d6d6d6; font-size: 15px; font-weight: bold; padding: 10px 0px; text-align: center;}
+.bookOK_info_table{width: 96%; margin: 20px 20px;}
+.bookOK_info_table tr{border:1px solid #d0d0d0;}
+.bookOK_info_table th{padding: 8px 20px 8px 0px; text-align: right;}
+.bookOK_info_table td{padding: 8px 0px 8px 20px; }
+.bookOK_info_table th{background-color:#ebf0f2; font-weight: bold; }
+/************************************************       contents end     *********************************************/
+
+
+/************************************************       footer start     *********************************************/
+footer {margin-top: 100px; height: 110px; background-color: #565e6b;}
+.footer_wrap {width: 970px; margin: 0 auto;}
+.footer_link {float: left; color: #d0ebed; margin-top: 30px;}
+.footer_sns{float: right; margin-top: 30px;}
+.footer_sns ul li{float: right; padding: 0px 4px;}
+.footer_copy{color: #d0ebed;}
+/************************************************       footer end     *********************************************/

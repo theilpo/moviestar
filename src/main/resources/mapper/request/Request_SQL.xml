@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="request">
+    
+    <!-- 문의내역 저장 -->
+	<insert id="insertRequest" parameterType="hashmap">
+	
+		<![CDATA[
+			
+			INSERT INTO TB_REQUEST
+			(
+				IDX,
+			    TITLE, 
+			    CONTENTS, 
+			    REQ_ID, 
+			    REQ_DTM,
+			    ANSWER_GB
+			)
+			VALUES
+			(
+				SEQ_TB_REQUEST_IDX.NEXTVAL, 
+			    #{TITLE}, 
+			    #{CONTENTS}, 
+			    #{REQ_ID}, 
+			    SYSDATE,
+			    'N'
+			)
+		]]>
+	</insert>
+	
+	<!-- 문의내역 목록조회 -->
+	<select id="selectRequestList" parameterType="hashmap" resultType="hashmap">
+		
+		<![CDATA[
+			SELECT
+				* 
+			FROM
+			(
+				SELECT
+					IDX,
+					PARENT_IDX,
+					TITLE,
+					CONTENTS,
+					REQ_ID,
+					TO_CHAR(REQ_DTM,'YYYY-MM-DD') as REQ_DTM,
+					ANSWER_ID,
+					TO_CHAR(ANSWER_DTM,'YYYY-MM-DD') as ANSWER_DTM,
+					ANSWER_GB,
+					ROW_NUMBER() OVER(ORDER BY IDX DESC) as RNUM	
+				FROM
+					TB_REQUEST
+				WHERE
+					PARENT_IDX IS NULL
+			) X
+			WHERE
+				X.RNUM BETWEEN #{first} AND #{last}	
+		]]>
+	</select>
+	
+	<!-- 문의내역 목록 카운트 -->
+	<select id="selectRequestListCnt" resultType="int">
+		
+		<![CDATA[
+			SELECT
+				COUNT(*)		
+			FROM
+				TB_REQUEST
+			WHERE
+				PARENT_IDX IS NULL
+		]]>
+	</select>
+	
+	<!-- 문의내역 상세조회 -->
+	<select id="selectRequestDetail" parameterType="hashmap" resultType="hashmap">
+		
+		<![CDATA[
+			
+			SELECT
+				IDX,
+				PARENT_IDX,
+				TITLE,
+				CONTENTS,
+				REQ_ID,
+				TO_CHAR(REQ_DTM,'YYYY-MM-DD HH24:MI') as REQ_DTM,
+				ANSWER_ID,
+				TO_CHAR(ANSWER_DTM,'YYYY-MM-DD HH24:MI') as ANSWER_DTM,
+				ANSWER_GB
+			FROM
+				TB_REQUEST
+			WHERE
+				IDX = #{IDX}
+		]]>
+	</select>
+	
+	<!-- 문의내역 답변 -->
+	<insert id="insertRequestAnswer" parameterType="hashmap">
+	
+		<![CDATA[
+			
+			INSERT INTO TB_REQUEST
+			(
+				IDX,
+				PARENT_IDX,
+				TITLE,
+			    CONTENTS, 
+			    ANSWER_ID, 
+			    ANSWER_DTM
+			)
+			VALUES
+			(
+				SEQ_TB_REQUEST_IDX.NEXTVAL, 
+			    #{IDX}, 
+			    '[RE] ' || #{TITLE},
+			    #{CONTENTS}, 
+			    #{ANSWER_ID}, 
+			    SYSDATE
+			)
+		]]>
+	</insert>
+	
+	<!-- 답변상태 변경 -->
+	<update id="updateAnswerGB" parameterType="hashmap">
+		
+		<![CDATA[
+			
+			UPDATE TB_REQUEST
+			SET
+				ANSWER_GB = 'Y'
+			WHERE
+				IDX = #{IDX}
+		]]>
+	</update>
+	
+	<!-- 답변내역 상세조회 -->
+	<select id="selectAnswerDetail" parameterType="hashmap" resultType="hashmap">
+		
+		<![CDATA[
+			
+			SELECT
+				R1.IDX,
+				R1.TITLE,
+				R1.CONTENTS,
+				R1.REQ_ID,
+				TO_CHAR(R1.REQ_DTM,'YYYY-MM-DD HH24:MI') as REQ_DTM,
+				R2.PARENT_IDX,
+				R2.CONTENTS as A_CONTENTS,
+				R2.ANSWER_ID,
+				TO_CHAR(R2.ANSWER_DTM,'YYYY-MM-DD HH24:MI') as ANSWER_DTM
+			FROM
+				TB_REQUEST R1 JOIN TB_REQUEST R2
+				ON R1.IDX = R2.PARENT_IDX
+			WHERE
+				R1.IDX = #{IDX}
+		]]>
+	</select>
+	
+</mapper>

@@ -1,0 +1,101 @@
+@charset "utf-8";
+
+/**************************************************        reset start       ************************************************/ 
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, pre, a, abbr, acronym, cite, code, del, dfn, em, img, ins, q, s, samp, strike,  sub, sup, u, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, embed {margin:0;padding:0;border:0;}
+html{overflow-y:scroll}
+html,body{width:100%;height:100%;*word-break:break-all;-ms-word-break:break-all}
+body,h1,h2,h3,h4,h5,h6,input,button,textarea,select{color:#666;line-height:1.5;font:12px "돋움",Dotum,Verdana,Arial,AppleGothic,sans-serif;}
+img,fieldset,iframe{border:0 none}
+legend{position:absolute;left:-1000%;top:0;width:1px;height:1px;font-size:0;line-height:0;overflow:hidden}
+caption {width:0;height:0;visibility:hidden;line-height:0;font-size:0}
+ol, ul,li{ list-style:none;}
+input,select,button,img,textarea {vertical-align:middle}
+i,em,address{font-style:normal}
+label,button{cursor:pointer}
+button {margin:0;padding:0;border:0;background-color:transparent;cursor:pointer;}
+button *{position:relative}
+button img{left:-3px;*left:auto}
+table {border-spacing:0;width:100%;border: 0 none;border-collapse: collapse;table-layout:fixed;word-wrap:break-word;}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {display: block;margin: 0;padding: 0;border: 0;}
+form{text-align:left;}
+caption, th, td {text-align:left; font-weight:normal;}
+legend{*width:0}
+a { color:#666; cursor:pointer;}
+a:link,a:visited { text-decoration:none;}
+a:hover,a:active { text-decoration:none; cursor:pointer;}
+/**************************************************        reset end       ************************************************/ 
+
+
+/**************************************************      common start     *************************************************/
+.content_wrap{margin: 20px 50px 0px 50px; }
+.menu_title{padding:10px 0px; color: black; font-size:26px; font-weight:bold; border-bottom: 1px solid #eeeeee;}
+.btn_wrap{margin: 40px 0px 100px 0px; text-align:center;}
+.btn_orange{padding: 10px 30px; background-image: url("../images/btn_color_orange.png"); font-weight: bold; border: none;}
+.btn_gray{padding: 10px 30px; background-image: url("../images/btn_color_gray.png"); font-weight: bold; border: none;}
+.btn_orange:hover, .btn_gray:hover{cursor: pointer;}
+.tcenter{text-align: center;}
+.common_table{margin: 20px 0px 5px 0px;}
+.common_table tr{border:1px solid #d0d0d0;}
+.common_table th{padding: 15px 0px 15px 10px; background-color:#ebf0f2; font-weight: bold;}
+.common_table td{padding: 15px 0px 15px 10px; }
+.write_common_table{margin: 20px 0px 5px 0px;}
+.write_common_table tr{border:1px solid #d0d0d0;}
+.write_common_table th{padding: 8px 10px; background-color:#ebf0f2; font-weight: bold;}
+.write_common_table td{padding: 8px 10px; }
+.write_common_table input, .write_common_table select{padding: 6px 6px; }
+.file_input_textbox {float: left;}
+.file_input_div {position: relative; width: 80px;height: 30px; overflow: hidden;}
+.file_input_button {width: 80px; position: absolute; top: 0px; background-color: #33BB00; color: #ffffff; border-style: solid;}
+.file_input_hidden {width:66px; height:14px; position: absolute; top: 0px; opacity: 0; filter: alpha(opacity=0); -ms-filter: "alpha(opacity=0)"; -khtml-opacity: 0; -moz-opacity: 0;}
+#pageNav{margin-top: 20px; font-size: 14px; text-align: center;}
+/**************************************************      common end     *************************************************/
+
+
+/******************************************************     header start    ******************************************/
+/** layout **/
+header{height: 51px; background-color: #222222;}
+.container{position: relative; height: 800px;}
+.navigator{display: inline-block; width: 250px; height: 100%; background-color: #e5e5e5;}
+.content{display: inline-block; position: absolute; left: 250px; right: 0; height: 100%;}
+
+/** header LV1 **/
+header > ul{float: right;}
+header > ul > li{float:left; position:relative; width:130px;}
+header > ul > li > a{display:block; padding: 17px 0px; color:#fff; background:#222222; font:bold 13px "맑은 고딕", arial; text-align:center; }
+header ul li a:hover{color:#000; background:#a5cd4e;}
+
+/** header LV2 **/
+header ul ul{display:none;}
+header > ul > li:hover ul{display:block; position:absolute; left:0; top:51px; z-index: 1;}
+header li li{width:130px; text-align:center; background-color: #efefef;}
+header li li a{display:block; padding: 17px 0px; font:bold 13px "맑은 고딕", arial; }
+header li li a:hover{color:#000; background-color: #a5cd4e;}
+/******************************************************     header end    ******************************************/
+
+
+/************************************************       contents start     *********************************************/
+/**** memberList ****/
+.member_gb{margin-top:30px; text-align: right;}
+.member_gb span{padding-left: 10px;}
+.more_hidden{width: 120px; display: none; border: 2px solid #ebf0f2; background-color: #ffffff;}
+.more_hidden li{padding: 10px 0px 10px 20px; }
+.more_hidden li:HOVER {background-color: #ebf0f2; }
+.more_close{text-align: right;}
+
+/**** movieWrite ****/
+.genreDiv{width: 440px;}
+
+/**** theaterWrite ****/
+#map{height:340px; border:1px solid #d0d0d0;}
+.controls {background-color: #fff;border-radius: 2px;border: 1px solid transparent;box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);box-sizing: border-box;font-family: Roboto;font-size: 15px;font-weight: 300;height: 29px;margin-left: 17px;margin-top: 10px;outline: none;padding: 0 11px 0 13px;text-overflow: ellipsis;width: 400px;}
+.controls:focus {border-color: #4d90fe;}
+.title {font-weight: bold;}
+#infowindow-content {display: none;}
+#map #infowindow-content {display: inline;}
+
+/**** timeWrite ****/
+.startTimeDiv{width: 55px; background-color: #4484c7; margin: 10px 8px 0px 0px; padding: 8px 8px; color: white; float: left;}
+
+/**** noticeList, noticeDetail, noticeUpdate, requestWrite ****/
+.del_notice_wrap, .list_notice_wrap, .list_request_wrap{margin-top: 20px; text-align: right;}
+/************************************************       contents end     *********************************************/

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="book">
+	
+	<!-- 좌석 조회 -->
+	<select id="selectSeatList" parameterType="hashmap" resultType="hashmap">
+		SELECT
+			a.*,
+			b.USEABLE_CNT
+		FROM
+		(
+			SELECT
+				TM.TIME_NO,
+				TO_CHAR(TM.SHOW_DT, 'yyyy.mm.dd') || '(' || TO_CHAR(TM.SHOW_DT, 'DY', 'NLS_DATE_LANGUAGE=korean') || ')' as SHOW_DT,
+				TM.START_TIME,
+				TM.END_TIME,
+				MV.MOVIE_NO,
+				MV.MOVIE_NAME,
+				MV.GRADE,
+				TT.THEATER_NO,
+				TT.THEATER_NAME,
+				HL.HALL_NO,
+				HL.HALL_NAME,
+				HL.SEAT_CNT,
+				ST.SEAT_NO,
+				SUBSTR(ST.SEAT_NO, 1, 1) as SEAT_ROW,
+				SUBSTR(ST.SEAT_NO, 2) as SEAT_COL,
+				ST.USEABLE
+			FROM 
+		 		TB_TIME TM JOIN TB_MOVIE MV
+		     		ON TM.MOVIE_NO = MV.MOVIE_NO
+		 		JOIN TB_THEATER TT
+		     		ON TM.THEATER_NO = TT.THEATER_NO		 
+		 		JOIN TB_HALL HL
+			 		ON TM.HALL_NO = HL.HALL_NO
+	     		JOIN TB_SEAT ST
+	     	 		ON TM.TIME_NO = ST.TIME_NO
+			WHERE
+		 		1 = 1
+		 		AND TM.MOVIE_NO   = #{MOVIE_NO}
+		 		AND TM.THEATER_NO = #{THEATER_NO}
+		 		AND TM.HALL_NO    = #{HALL_NO}
+		 		AND TM.SHOW_DT    = #{SHOW_DT}
+				AND TM.START_TIME = #{START_TIME}
+		) a
+		JOIN
+		(
+			SELECT 
+			 	T.TIME_NO, 
+				COUNT(*) as USEABLE_CNT 
+			FROM 
+				TB_TIME T JOIN TB_SEAT S 
+				ON T.TIME_NO = S.TIME_NO AND S.USEABLE = 'Y'
+			GROUP BY T.TIME_NO
+		) b
+		ON a.TIME_NO = b.TIME_NO
+		
+		ORDER BY
+			SEAT_ROW, TO_NUMBER(SEAT_COL)
+			<!-- A, B, ...		1, 2, ..., 10, ... -->
+	</select>
+	
+	<!-- 예매하기 -->
+	<insert id="insertBook" parameterType="hashmap">
+		INSERT INTO TB_BOOK
+		(
+			BOOK_NO,
+			TIME_NO,
+			PEOPLE,
+			SEATS_NO,
+			USE_POINT,
+			CHARGE,
+			BOOK_ID,
+			BOOK_DT
+		)
+		VALUES
+		(
+			#{BOOK_NO},
+			#{TIME_NO},
+			#{PEOPLE},
+			#{SEATS_NO},
+			#{DISCNT_CHARGE},
+			#{FINAL_CHARGE},
+			#{ID},
+			SYSDATE
+		)
+	</insert>
+	
+	<!-- 좌석 사용가능여부 수정 -->
+	<update id="updateSeat" parameterType="hashmap">
+		UPDATE 
+			TB_SEAT
+		SET
+			USEABLE = DECODE(#{BOOK_GB}, 'R', 'N', 'Y')
+			<!-- 구분 값이 '예약(R)'이면 사용가능여부 'N', '취소(C)'면 'Y'로 수정 -->
+		WHERE
+			TIME_NO = #{TIME_NO}
+			AND SEAT_NO = #{SEAT_NO}
+	</update>
+	
+	<!-- 예매취소 -->
+	<update id="cancleBook" parameterType="hashmap">
+		UPDATE
+			TB_BOOK
+		SET
+			STATUS = 'C'
+		WHERE
+			BOOK_NO = #{BOOK_NO}
+	</update>
+	
+	<!-- 예매 상세조회 -->
+	<select id="selectBookInfo" parameterType="hashmap" resultType="hashmap">
+		SELECT 
+			BK.BOOK_NO,
+			BK.PEOPLE,
+			BK.SEATS_NO,
+			BK.USE_POINT,
+			BK.CHARGE,
+			BK.BOOK_ID,
+			BK.BOOK_DT,
+			BK.STATUS,
+			BK.TIME_NO,
+			TO_CHAR(TM.SHOW_DT, 'yyyy.mm.dd') || '(' || TO_CHAR(TM.SHOW_DT, 'DY', 'NLS_DATE_LANGUAGE=korean') || ')' as SHOW_DT,
+			TM.START_TIME,
+			TM.END_TIME,
+			MV.MOVIE_NAME,
+			TT.THEATER_NAME,
+			HL.HALL_NAME
+		FROM
+			TB_BOOK BK JOIN TB_TIME TM
+				ON BK.TIME_NO = TM.TIME_NO
+			JOIN TB_MOVIE MV
+				ON TM.MOVIE_NO = MV.MOVIE_NO
+			JOIN TB_THEATER TT
+				ON TM.THEATER_NO = TT.THEATER_NO
+			JOIN TB_HALL HL
+				ON TM.HALL_NO = HL.HALL_NO
+		WHERE
+			BOOK_NO = #{BOOK_NO}
+	</select>
+	
+</mapper>

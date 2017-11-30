@@ -1,0 +1,66 @@
+<%@ page pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	 
+	<!-- Start Footer -->
+	<footer>
+		<div class="footer_wrap">
+			<div class="footer_link">
+				회사소개| 채용정보 | 이용약관 | 개인정보 처리방침 | 이메일무단수집거부<br><br>
+				MOVIESTAR, 2017, Son Byeong Yeon<br/>
+				상업용이 아닌 포트폴리오 입니다.
+			</div>
+			<div class="footer_sns">
+				<ul>
+					<li><img src="<c:url value='/images/footer_twitter.png'/>"></li>
+					<li><img src="<c:url value='/images/footer_facebook.png'/>"></li>
+					<li><img src="<c:url value='/images/footer_instagram.png'/>"></li>
+				</ul><br><br><br>
+				<div class="footer_copy">
+					COPYRIGHTⓒ 메가박스 롯데시네마 CGV. All RIGHTS RESERVED
+				</div>
+			</div>
+		</div>		
+	</footer>
+	<!-- End Footer -->
+	
+	<!-- commonForm -->
+	<form name="commonForm" id="commonForm"></form>
+	
+	<!-- loginForm -->
+	<div class="login_wrap">
+	 
+	    <div class="mask"></div>
+	    
+	    <div class="window">
+			<div class="login_close"><a href="#"><img src="<c:url value='/images/close.png'/>"></a></div>
+			<div class="login_logo"><img src="<c:url value='/images/logo.png'/>"></div>
+			
+			<div class="login_input">
+				<input type="text" id="ID" name="ID" maxlength="12" size="35" placeholder="ID"><br>
+				<input type="password" id="PASSWORD" name="PASSWORD" size="35" placeholder="Password">
+			</div>
+			
+			<div class="btn_wrap">
+				<input type="button" id="real_login" class="btn_orange" value="로그인">
+			</div>
+	    </div>
+	</div>
+	
+	<!-- TOP -->
+	<a class="top" href="#"><img src="<c:url value='/images/back_to_top.png'/>"></a>
+	
+	<!-- ADMIN -->
+	<c:if test="${S_MEM_GB == 'A'}">
+		<a class="admin" href="#"><img src="<c:url value='/images/settings.png'/>"></a>
+	</c:if>
+	
+	<!-- hidden -->
+	<input type="hidden" id="AFTER_LOGIN_URL" name="AFTER_LOGIN_URL"> <!-- 로그인 후 호출할 URL -->
+	
+</body>
+</html>

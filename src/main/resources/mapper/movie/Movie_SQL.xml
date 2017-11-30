@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="movie">
+    
+    <!-- 영화 저장 -->
+	<insert id="insertMovie" parameterType="hashmap">
+		<selectKey keyProperty="IDX" resultType="string" order="BEFORE">
+			SELECT SEQ_TB_MOVIE_MOVIE_NO.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			
+			INSERT INTO TB_MOVIE
+			(
+				MOVIE_NO,
+			    MOVIE_NAME, 
+			    GENRE, 
+			    PLAY_DT, 
+			    DIRECTOR,
+			    ACTOR,
+			    GRADE,
+			    RUN_TIME,
+			    PREVIEW_URL,
+			    CONTENTS
+			)
+			VALUES
+			(
+				#{IDX}, 
+			    #{MOVIE_NAME}, 
+			    #{GENRE}, 
+			    #{PLAY_DT}, 
+			    #{DIRECTOR},
+			    #{ACTOR},
+			    #{GRADE},
+			    #{RUN_TIME},
+			    #{PREVIEW_URL},
+			    #{CONTENTS}
+			)
+		]]>
+	</insert>
+	
+	<!-- 파일 추가 -->
+	<insert id="insertFile" parameterType="hashmap">
+	    <![CDATA[
+	        INSERT INTO TB_FILE
+	        (
+	            IDX,
+	            BOARD_GB,
+	            BOARD_IDX,
+	            ORIGINAL_FILE_NAME,
+	            STORED_FILE_NAME,
+	            FILE_SIZE,
+	            FILE_ORDER,
+	            CREA_ID
+	        )
+	        VALUES
+	        (
+	            SEQ_TB_FILE_IDX.NEXTVAL,
+	            'M',
+	            #{BOARD_IDX},
+	            #{ORIGINAL_FILE_NAME},
+	            #{STORED_FILE_NAME},
+	            #{FILE_SIZE},
+	            #{FILE_ORDER},
+	            'Admin'
+	        )
+	    ]]>
+	</insert>
+	
+	<!-- 영화 목록 조회 -->
+	<select id="selectMovieList" parameterType="hashmap" resultType="hashmap">
+			SELECT
+				M.MOVIE_NO,
+				M.MOVIE_NAME,
+				M.GENRE,
+				TO_CHAR(M.PLAY_DT,'YYYY.MM.DD') as PLAY_DT,
+				M.DIRECTOR,
+				M.ACTOR,
+				M.GRADE,
+				M.PREVIEW_URL,
+				M.CONTENTS,
+				F.STORED_FILE_NAME,
+				F.FILE_ORDER,
+				TO_CHAR(NVL(C.AVG_STAR_POINT, 0), '90.0') as AVG_STAR_POINT,
+				TRUNC(TO_DATE(TO_CHAR(M.PLAY_DT, 'YYYYMMDD'))) - TRUNC(TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))) as DDAY,
+				ROW_NUMBER() OVER(ORDER BY TO_CHAR(NVL(C.AVG_STAR_POINT, 0), '90.0') DESC, M.PLAY_DT ASC) as RNUM
+			FROM
+				TB_MOVIE M JOIN TB_FILE F
+					ON M.MOVIE_NO = F.BOARD_IDX AND F.BOARD_GB = 'M'
+				LEFT JOIN 
+				(
+				 	SELECT
+						MOVIE_NO,
+						ROUND(AVG(STAR_POINT), 1) as AVG_STAR_POINT
+					FROM
+						TB_COMMENT
+					GROUP BY
+						MOVIE_NO
+				) C
+					ON M.MOVIE_NO = C.MOVIE_NO
+			WHERE
+				1 = 1
+				<if test='CODE == "NEWEST"'>	<!-- 최신개봉작 -->
+					 <![CDATA[ AND TO_CHAR(M.PLAY_DT, 'YYYYMMDD') <= TO_CHAR(SYSDATE, 'YYYYMMDD') ]]>
+				</if>
+				<if test='CODE == "WILL"'>		<!-- 상영예정작 -->
+					 <![CDATA[ AND TO_CHAR(M.PLAY_DT, 'YYYYMMDD') > TO_CHAR(SYSDATE, 'YYYYMMDD') ]]>
+				</if>
+				AND F.FILE_ORDER = '1'
+	</select>
+	
+	<!-- 영화 상세조회 -->
+	<select id="selectMovieDetail" parameterType="hashmap" resultType="hashmap">
+			SELECT
+				M.MOVIE_NO,
+				M.MOVIE_NAME,
+				M.GENRE,
+				TO_CHAR(M.PLAY_DT, 'YYYY.MM.DD') as PLAY_DT,
+				CASE	<![CDATA[
+					 WHEN TO_CHAR(M.PLAY_DT, 'YYYYMMDD') <= TO_CHAR(SYSDATE, 'YYYYMMDD') THEN 'PAST'
+					 WHEN TO_CHAR(M.PLAY_DT, 'YYYYMMDD') > TO_CHAR(SYSDATE, 'YYYYMMDD') THEN 'WILL'	]]>
+				END as GUBUN,
+				M.DIRECTOR,
+				M.ACTOR,
+				M.GRADE,
+				M.RUN_TIME,
+				M.PREVIEW_URL,
+				M.CONTENTS,
+				F.STORED_FILE_NAME,
+				F.FILE_ORDER
+			FROM
+				TB_MOVIE M JOIN TB_FILE F
+				ON M.MOVIE_NO = F.BOARD_IDX
+				AND F.BOARD_GB = 'M'
+			WHERE
+				M.MOVIE_NO = #{MOVIE_NO}
+	</select>
+	
+	<!-- 영화 전체 목록 조회 -->
+	<select id="selectAllMovieList" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				MOVIE_NO,
+				MOVIE_NAME,
+				GENRE,
+				PLAY_DT,
+				GRADE
+			FROM
+				TB_MOVIE
+			ORDER BY
+				PLAY_DT DESC
+		]]>
+	</select>
+	
+</mapper>

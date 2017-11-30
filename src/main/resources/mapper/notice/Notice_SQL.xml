@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="notice">
+    
+	<!-- 공지사항 등록 -->
+	<insert id="insertNotice" parameterType="hashmap">
+		<selectKey keyProperty="IDX" resultType="string" order="BEFORE">
+			SELECT SEQ_TB_NOTICE_IDX.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			
+			INSERT INTO TB_NOTICE
+			(
+				IDX,
+			    TITLE, 
+			    CONTENTS, 
+			    HIT_CNT, 
+			    DEL_GB, 
+			    CREA_DTM, 
+			    CREA_ID
+			)
+			VALUES
+			(
+				#{IDX}, 
+			    #{TITLE}, 
+			    #{CONTENTS}, 
+			    0, 
+			    'N', 
+			    SYSDATE, 
+			    #{CREA_ID}
+			)
+		]]>
+	</insert>
+	
+	<!-- 공지사항 목록 조회 -->
+	<select id="selectNoticeList" parameterType="hashmap" resultType="hashmap">
+		
+		<![CDATA[
+			SELECT
+				* 
+			FROM
+			(
+				SELECT
+					IDX,
+					TITLE,
+					CONTENTS,
+					HIT_CNT,
+					DEL_GB,
+					CREA_ID,
+					TO_CHAR(CREA_DTM,'YYYY-MM-DD') as CREA_DTM,
+					ROW_NUMBER() OVER(ORDER BY IDX DESC) as RNUM	
+				FROM
+					TB_NOTICE
+				WHERE
+					DEL_GB = 'N'
+			) X
+			WHERE
+				X.RNUM BETWEEN #{first} AND #{last}	
+		]]>
+	</select>
+	
+	<!-- 공지사항 목록 카운트 -->
+	<select id="selectNoticeListCnt" resultType="int">
+		
+		<![CDATA[
+			SELECT
+				COUNT(*)		
+			FROM
+				TB_NOTICE
+			WHERE
+				DEL_GB = 'N'
+		]]>
+	</select>
+	
+	<!-- 공지사항 상세 조회 -->
+	<select id="selectNoticeDetail" parameterType="hashmap" resultType="hashmap">
+		
+		<![CDATA[
+		
+			SELECT
+				IDX,
+				TITLE,
+				CONTENTS,
+				HIT_CNT,
+				DEL_GB,
+				TO_CHAR(CREA_DTM,'YYYY-MM-DD HH24:MI') as CREA_DTM,
+				CREA_ID			
+			FROM
+				TB_NOTICE
+			WHERE
+				IDX = #{IDX}
+			
+		]]>
+		
+	</select>
+	
+	<!-- 공지사항 수정 -->
+	<update id="updateNotice" parameterType="hashmap">
+		
+		<![CDATA[
+		
+			UPDATE TB_NOTICE
+			SET
+				TITLE = #{TITLE},
+				CONTENTS = #{CONTENTS}
+			WHERE
+				IDX = #{IDX}
+		]]>
+	</update>
+	
+	<!-- 공지사항 삭제 -->
+	<update id="deleteNotice" parameterType="hashmap">
+		
+		<![CDATA[
+		
+			UPDATE TB_NOTICE
+			SET
+				DEL_GB = 'Y'
+			WHERE
+				IDX = #{IDX}
+		]]>
+	</update>
+	
+	<!-- 조회수 증가 -->
+	<update id="updateHitCount" parameterType="hashmap">
+		
+		<![CDATA[
+		
+			UPDATE TB_NOTICE
+			SET
+				HIT_CNT = NVL(HIT_CNT, 0) + 1
+			WHERE
+				IDX = #{IDX}
+		]]>
+	</update>
+	
+</mapper>
