@@ -333,7 +333,7 @@
 				<configuration>
 					<url>http://byson.iptime.org:8090/manager/text</url>
 					<username>byson</username>
-					<password>tmrnfn12</password>
+					<password>byson</password>
 					<path>/moviestar</path>
 					<update>true</update>
 				</configuration>
